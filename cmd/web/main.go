@@ -7,9 +7,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/guoard/bookings/pkg/config"
-	"github.com/guoard/bookings/pkg/handlers"
-	"github.com/guoard/bookings/pkg/render"
+	"github.com/guoard/bookings/internal/config"
+	"github.com/guoard/bookings/internal/handlers"
+	"github.com/guoard/bookings/internal/render"
 )
 
 const portNumber = ":8000"
