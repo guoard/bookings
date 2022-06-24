@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,14 +10,18 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/guoard/bookings/internal/config"
 	"github.com/guoard/bookings/internal/handlers"
+	"github.com/guoard/bookings/internal/models"
 	"github.com/guoard/bookings/internal/render"
 )
 
 const portNumber = ":8000"
+
 var app config.AppConfig
 var session *scs.SessionManager
 
 func main() {
+	gob.Register(models.Reservation{})
+
 	app.InProduction = false
 
 	session = scs.New()
@@ -26,7 +31,6 @@ func main() {
 	session.Cookie.Secure = app.InProduction
 
 	app.Session = session
-
 
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
