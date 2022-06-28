@@ -5,21 +5,26 @@ import (
 	"net/http"
 
 	"github.com/guoard/bookings/internal/config"
+	"github.com/guoard/bookings/internal/driver"
 	"github.com/guoard/bookings/internal/forms"
 	"github.com/guoard/bookings/internal/helpers"
 	"github.com/guoard/bookings/internal/models"
 	"github.com/guoard/bookings/internal/render"
+	"github.com/guoard/bookings/internal/repository"
+	"github.com/guoard/bookings/internal/repository/dbrepo"
 )
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 var Repo *Repository
 
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgreRepo(db.SQL, a),
 	}
 }
 
