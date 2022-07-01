@@ -43,7 +43,7 @@ func (m *postgreDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 	defer cancel()
 
 	stmt := `insert into room_restrictions (start_date, end_date, room_id, reservation_id,
-					created_at, update_at, restriction_id
+					created_at, updated_at, restriction_id)
 					values ($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err := m.DB.ExecContext(ctx, stmt,
@@ -53,7 +53,7 @@ func (m *postgreDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 		r.ReservationID,
 		time.Now(),
 		time.Now(),
-		r.ReservationID,
+		r.RestrictionID,
 	)
 	if err != nil {
 		return err
@@ -128,4 +128,27 @@ func (m *postgreDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]m
 
 	return rooms, nil
 
+}
+
+func (m *postgreDBRepo) GetRoomByID(id int) (models.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var room models.Room
+
+	query := `select id, room_name, created_at, updated_at from rooms where id = $1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+	err := row.Scan(
+		&room.ID,
+		&room.RoomName,
+		&room.CreatedAt,
+		&room.UpdatedAt,
+	)
+
+	if err != nil {
+		return room, err
+	}
+
+	return room, nil
 }
