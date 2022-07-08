@@ -19,14 +19,12 @@ func TestAddDefaultData(t *testing.T) {
 
 	result := AddDefaultData(&td, r)
 	if result.Flash != "123" {
-		t.Error("flash value 123 not found in session")
+		t.Error("flash value of 123 not found in session")
 	}
-
 }
 
 func TestRenderTemplate(t *testing.T) {
-	pathToTemplate = "./../../templates"
-
+	pathToTemplates = "./../../templates"
 	tc, err := CreateTemplateCache()
 	if err != nil {
 		t.Error(err)
@@ -39,7 +37,7 @@ func TestRenderTemplate(t *testing.T) {
 		t.Error(err)
 	}
 
-	ww := myWriter{}
+	var ww myWriter
 
 	err = Template(&ww, r, "home.page.html", &models.TemplateData{})
 	if err != nil {
@@ -70,8 +68,7 @@ func TestNewTemplates(t *testing.T) {
 }
 
 func TestCreateTemplateCache(t *testing.T) {
-	pathToTemplate = "./../../templates"
-
+	pathToTemplates = "./../../templates"
 	_, err := CreateTemplateCache()
 	if err != nil {
 		t.Error(err)

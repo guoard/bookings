@@ -17,14 +17,17 @@ var session *scs.SessionManager
 var testApp config.AppConfig
 
 func TestMain(m *testing.M) {
+
+	// what am I going to put in the session
 	gob.Register(models.Reservation{})
 
+	// change this to true when in production
 	testApp.InProduction = false
 
-	infoLog := log.New(os.Stdout, "INOF\t", log.Ldate|log.Ltime)
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	testApp.InfoLog = infoLog
 
-	errorLog := log.New(os.Stdout, "Error\t", log.Ldate|log.Ltime|log.Lshortfile)
+	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	testApp.ErrorLog = errorLog
 
 	session = scs.New()
@@ -42,10 +45,16 @@ func TestMain(m *testing.M) {
 
 type myWriter struct{}
 
-func (w *myWriter) Header() http.Header {
-	return http.Header{}
+func (tw *myWriter) Header() http.Header {
+	var h http.Header
+	return h
 }
-func (w *myWriter) Write(b []byte) (int, error) {
-	return len(b), nil
+
+func (tw *myWriter) WriteHeader(i int) {
+
 }
-func (w *myWriter) WriteHeader(stausCode int) {}
+
+func (tw *myWriter) Write(b []byte) (int, error) {
+	length := len(b)
+	return length, nil
+}

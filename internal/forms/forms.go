@@ -51,7 +51,7 @@ func (f *Form) Valid() bool {
 	return len(f.Errors) == 0
 }
 
-func (f *Form) IsEmaild(field string) {
+func (f *Form) IsEmail(field string) {
 	if !govalidator.IsEmail(f.Get(field)) {
 		f.Errors.Add(field, "Invalid email address")
 	}
