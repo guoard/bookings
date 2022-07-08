@@ -187,7 +187,8 @@ func (m *postgreDBRepo) UpdateUser(u models.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `update users set first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5`
+	query := `update users set first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5
+						where id = $6`
 
 	_, err := m.DB.ExecContext(ctx, query,
 		u.FirstName,
@@ -195,6 +196,7 @@ func (m *postgreDBRepo) UpdateUser(u models.User) error {
 		u.Email,
 		u.AccessLevel,
 		time.Now(),
+		u.ID,
 	)
 
 	if err != nil {
